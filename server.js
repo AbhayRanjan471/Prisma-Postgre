@@ -13,6 +13,7 @@ app.get("/", function(req,res){
     return res.send("hey buddy");
 })
 
+
 /* ***************** Routers ******** */
 import router from './routes/index.js';
 app.use(router);
