@@ -14,10 +14,35 @@ datasource db {
 }
 
 //Creating User Schema
-model user {
-  id         Int      @id @default(autoincrement())  //@default(autoincrement()) - Specifies that the value for the id field will be automatically generated and incremented by the database for each new record.
+model User {
+  id         Int       @id @default(autoincrement()) //@default(autoincrement()) - Specifies that the value for the id field will be automatically generated and incremented by the database for each new record.
   name       String //String? - ? means option that means if the user doesnot pass the name then also it will work
-  email      String   @unique
+  email      String    @unique
   password   String?
-  created_at DateTime @default(now()) //now() - will give the current time at which the user was created
+  post       Post[] //This establishes a relationship with the post model. The post[] indicates that a single user can have many posts. This is the one-to-many relationship.
+  comment    Comment[]
+  created_at DateTime  @default(now()) //now() - will give the current time at which the user was created
+}
+
+//Creating Post Schema
+model Post {
+  id            Int       @id @default(autoincrement())
+  user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade) //This establishes the relationship with the User model. fields: [user_id]: Specifies that the user_id field in the Post table is the foreign key linking this Post to a user.references: [id]: Specifies that the user_id refers to the id field in the User table.
+  user_id       Int
+  title         String
+  description   String
+  comment_count BigInt    @default(0)
+  comment       Comment[]
+  created_at    DateTime  @default(now())
+}
+
+//Creaing Comment Schema
+model Comment {
+  id         String   @id @default(uuid())
+  post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade) //onDelete: Cascade, This defines what happens to the related records when the referenced record is deleted. Cascade means:If a Post is deleted, all related Comment records will also be deleted automatically.
+  post_id    Int
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  comment    String
+  created_at DateTime @default(now())
 }
