@@ -14,7 +14,7 @@ datasource db {
 }
 
 //Creating User Schema
-model User {
+model user {
   id         Int      @id @default(autoincrement())  //@default(autoincrement()) - Specifies that the value for the id field will be automatically generated and incremented by the database for each new record.
   name       String //String? - ? means option that means if the user doesnot pass the name then also it will work
   email      String   @unique

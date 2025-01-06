@@ -7,6 +7,7 @@ export const createUser = async (req,res)=>{
 
   //Checking if the user already exist
   const findUser = await prisma.user.findUnique({
+    // where: denotes kiske basis pe find krna hai
     where: {
       email: email, // this email value is from the req body
     },
@@ -55,4 +56,19 @@ export const updateUser = async function(req,res){
   });
 
   return res.json({ status: 200, message: "User updated Successfully" });
+}
+
+/*************************** getALL USER ***************************/ 
+export const getALLUser = async function(req, res){
+
+  // Fetching all users using Prisma client
+  const users = await prisma.user.findMany({})
+
+   return res.json({
+     status: 200,
+     data: users,
+     message: "fetched all users succcessfully",
+   });
+
+ 
 }

@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client"  //  PrismaClient: This is the class
 
 //This initializes a new instance of PrismaClient. This instance will be used to interact with your database (e.g., to make queries, mutations, etc.).
 const prisma = new PrismaClient({
-  log: ["query"], //["query"] means that Prisma will log the SQL queries sent to the database
+  log: ["query"], //["query"] means that Prisma will log the SQL queries sent to the database , in the terminal
 });
 
 export default prisma;
