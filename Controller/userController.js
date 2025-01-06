@@ -61,7 +61,7 @@ export const updateUser = async function(req,res){
 /*************************** getALL USER ***************************/ 
 export const getALLUser = async function(req, res){
 
-  // Fetching all users using Prisma client
+  // Fetching all users using Prisma client, In future if we want to getALL user with any condition we can use 'where'
   const users = await prisma.user.findMany({})
 
    return res.json({
@@ -71,4 +71,40 @@ export const getALLUser = async function(req, res){
    });
 
  
+}
+
+/****************** Show USER ************************************** */
+export const showUser = async function(req, res){
+  const userId = req.params.id;
+
+  //finding the user using it's user id
+  const User = await prisma.user.findUnique({
+    where: {
+      id: Number(userId),
+    },
+  });
+
+  return res.json({
+    status: 200,
+    data:User,
+    message:"found the user Successfully"
+  })
+}
+
+/****************** DELETE USER ************************************** */
+export const deleteUser = async function(req, res){
+  const userId = req.params.id;
+
+  //delete the user using id
+  await prisma.user.delete({
+    where:{
+      id: Number(userId),
+    }
+  })
+
+  return res.json({
+    status: 200,
+    message: "User deleted Successfully",
+  })
+
 }
