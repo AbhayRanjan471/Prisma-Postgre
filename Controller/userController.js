@@ -1,7 +1,7 @@
 import prisma from "../DB/db.config.js";
 
 /********************** CREATE USER ******************************** */
-export const createUser = async (req,res)=>{
+export const createUser = async (req, res) => {
   //Taking all the details field by the user
   const { name, email, password } = req.body;
 
@@ -34,10 +34,10 @@ export const createUser = async (req,res)=>{
     data: newUser,
     message: "User Created successfully",
   });
-}
+};
 
 /********************** UPDATE USER ******************************** */
-export const updateUser = async function(req,res){
+export const updateUser = async function (req, res) {
   //Taking all the details field by the user
   const { name, email, password } = req.body;
   // Extracting the user ID from the route parameters (passed as a string)
@@ -56,25 +56,26 @@ export const updateUser = async function(req,res){
   });
 
   return res.json({ status: 200, message: "User updated Successfully" });
-}
+};
 
-/*************************** getALL USER ***************************/ 
-export const getALLUser = async function(req, res){
-
+/*************************** getALL USER ***************************/
+export const getALLUser = async function (req, res) {
   // Fetching all users using Prisma client, In future if we want to getALL user with any condition we can use 'where'
-  const users = await prisma.user.findMany({})
+  const users = await prisma.user.findMany({
+    include: {
+      post: true, // Include posts associated with each user
+    },
+  });
 
-   return res.json({
-     status: 200,
-     data: users,
-     message: "fetched all users succcessfully",
-   });
-
- 
-}
+  return res.json({
+    status: 200,
+    data: users,
+    message: "fetched all users succcessfully",
+  });
+};
 
 /****************** Show USER ************************************** */
-export const showUser = async function(req, res){
+export const showUser = async function (req, res) {
   const userId = req.params.id;
 
   //finding the user using it's user id
@@ -86,25 +87,24 @@ export const showUser = async function(req, res){
 
   return res.json({
     status: 200,
-    data:User,
-    message:"found the user Successfully"
-  })
-}
+    data: User,
+    message: "found the user Successfully",
+  });
+};
 
 /****************** DELETE USER ************************************** */
-export const deleteUser = async function(req, res){
+export const deleteUser = async function (req, res) {
   const userId = req.params.id;
 
   //delete the user using id
   await prisma.user.delete({
-    where:{
+    where: {
       id: Number(userId),
-    }
-  })
+    },
+  });
 
   return res.json({
     status: 200,
     message: "User deleted Successfully",
-  })
-
-}
+  });
+};
