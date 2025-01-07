@@ -63,7 +63,24 @@ export const updatePost = async function(req,res){
 /************************** getALL Post **************************************** */
 export const getAllPost = async function(req,res){
 
-    const posts = await prisma.post.findMany({})
+    const posts = await prisma.post.findMany({
+      //this will also include the comment related to this particular post
+      include: {
+        comment: {
+          select: {
+            comment: true, // Fetch only the comment 
+            user: {
+              select: {
+                name: true, // Fetch only the name of the user who made the comment
+              },
+            },
+          },
+        },
+      },
+      orderBy:{  //to gett all the details in decending order
+        id:"desc"
+      }
+    });
 
     return res.json({
         status: 200,

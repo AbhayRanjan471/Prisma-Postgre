@@ -38,7 +38,7 @@ model Post {
 
 //Creaing Comment Schema
 model Comment {
-  id         String   @id @default(uuid())
+  id         String   @id @default(uuid())  //The uuid() function generates a universally unique identifier (UUID) for the field whenever a new record is created.
   post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade) //onDelete: Cascade, This defines what happens to the related records when the referenced record is deleted. Cascade means:If a Post is deleted, all related Comment records will also be deleted automatically.
   post_id    Int
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
