@@ -79,6 +79,12 @@ export const getAllPost = async function(req,res){
       },
       orderBy:{  //to gett all the details in decending order
         id:"desc"
+      },
+      //Search only those data whose comment count > 0
+      where:{
+        comment_count:{
+          gt:0
+        }
       }
     });
 

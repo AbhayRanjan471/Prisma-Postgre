@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 3000
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))  //Middleware to parse URL-encoded data
 
-app.get("/", function(req,res){
-    return res.send("hey buddy");
-})
+// app.get("/", function(req,res){
+//     return res.send("hey buddy");
+// })
 
 
 /* ***************** Routers ******** */
