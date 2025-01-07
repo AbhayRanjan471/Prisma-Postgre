@@ -2,21 +2,23 @@ import prisma from "../DB/db.config.js";
 
 /**8**************************** CREATE POST ************************* */
 export const createPost = async function(req,res){
-    const { user_id, description, title } = req.body;
+  // Destructuring user_id, description, and title from the request body
+  const { user_id, description, title } = req.body;
 
-    const newPost = await prisma.post.create({
-      data: {
-        user_id: Number(user_id),
-        title,
-        description,
-      },
-    });
+  //Create a new Post using Prisma client
+  const newPost = await prisma.post.create({
+    data: {
+      user_id: Number(user_id),
+      title,
+      description,
+    },
+  });
 
-    return res.json({
-        status:200,
-        data:newPost,
-        message: "Post created Successfully"
-    })
+  return res.json({
+    status: 200,
+    data: newPost,
+    message: "Post created Successfully",
+  });
 }
 
 /******************************** SHOW Post ****************************** */
@@ -39,6 +41,7 @@ export const showPost = async function(req,res){
 /**************************** UPDATE POST ***************************** */
 export const updatePost = async function(req,res){
     const {title,description} = req.body;
+    //getting Id of the post which we want to update, send by the user in the URL
     const postId = req.params.id;
 
     await prisma.post.update({

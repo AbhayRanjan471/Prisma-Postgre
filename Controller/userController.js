@@ -62,8 +62,14 @@ export const updateUser = async function (req, res) {
 export const getALLUser = async function (req, res) {
   // Fetching all users using Prisma client, In future if we want to getALL user with any condition we can use 'where'
   const users = await prisma.user.findMany({
+    // Using the 'include' option to fetch related data from the 'post' model for each user
     include: {
-      post: true, // Include posts associated with each user
+      post: {
+        select: {     // Select command let's u select only the required field which u  want from the 'Post' model
+          title: true,    // Includes the 'title' field of each post
+          comment_count: true,
+        },
+      },
     },
   });
 
