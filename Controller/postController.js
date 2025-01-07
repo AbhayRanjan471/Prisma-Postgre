@@ -62,37 +62,66 @@ export const updatePost = async function(req,res){
 
 /************************** getALL Post **************************************** */
 export const getAllPost = async function(req,res){
+  // Implementing Pagination
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 100; //by default (100 posts per page).
 
-    const posts = await prisma.post.findMany({
-      //this will also include the comment related to this particular post
-      include: {
-        comment: {
-          select: {
-            comment: true, // Fetch only the comment 
-            user: {
-              select: {
-                name: true, // Fetch only the name of the user who made the comment
-              },
+  //if the user has given page = 0 , we will set it to 1
+  if (page <= 0) {
+    page = 1;
+  }
+  //if the user has given limit > 100  or < 0, we will set it to 10
+  if (limit <= 0 || limit > 100) {
+    limit = 10;
+  }
+
+  const skip = (page - 1) * limit;
+
+  const posts = await prisma.post.findMany({
+    skip: skip, //Tells Prisma how many records to skip.
+    take: limit, //Specifies how many records to fetch (limited by limit).
+
+    //this will also include the comment related to this particular post
+    include: {
+      comment: {
+        select: {
+          comment: true, // Fetch only the comment
+          user: {
+            select: {
+              name: true, // Fetch only the name of the user who made the comment
             },
           },
         },
       },
-      orderBy:{  //to gett all the details in decending order
-        id:"desc"
+    },
+    orderBy: {
+      id: "desc", //to gett all the details in decending order
+    },
+    // Filters records where the title starts with "hey buddy"
+    where: {
+      // title: {
+      //   startsWith: "hey buddy",
+      // },
+      comment_count: {
+        gt: 0,
       },
-      //Search only those data whose comment count > 0
-      where:{
-        comment_count:{
-          gt:0
-        }
-      }
-    });
+    },
+  });
 
-    return res.json({
-        status: 200,
-        data: posts,
-        message: "found all post"
-    })
+  // To get the Total page count
+  const totalPosts = await prisma.post.count();
+  const totalPages = Math.ceil(totalPosts / limit);
+
+  return res.json({
+    status: 200,
+    data: posts,
+    message: "found all post",
+    meta: {
+      totalPages,
+      currentPage: page,
+      limit: limit
+    }
+  });
 }
 
 /************************ DELETE Post ***************************************** */

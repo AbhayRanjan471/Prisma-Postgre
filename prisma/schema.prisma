@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  // previewFeatures = ["fullTextSearchPostgres"] //Enabling full-text search for PostgreSQL
 }
 
 datasource db {
