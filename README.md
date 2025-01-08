@@ -75,3 +75,43 @@ Page 3: (3 - 1) * 100 = 200 → Skip the first 200 records.
 totalPosts = 450;
 limit = 100
 totalPages = Math.ceil(450 / 100) = 5;
+
+/************************ Node Mailer *************************************/
+# npm install nodemailer
+
+
+import nodemailer from 'nodemailer'  //Nodemailer is used for sending emails
+import dotenv from "dotenv"
+
+dotenv.config();
+
+
+const transporter = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io", // Mailtrap SMTP server
+  port: 2525, // Mailtrap SMTP port, use for the connection
+
+  auth: {   //auth: Authentication information (username and password) needed to authenticate with the SMTP server.
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+export default transporter;
+
+
+// Send a welcome email to the user
+  const mailOptions = {
+    from: process.env.EMAIL_USER, // Sender email
+    to: email, // Recipient email (new user's email)
+    subject: "Welcome to Our Platform!",
+    text: `Hi ${name},\n\nWelcome to our platform! We're excited to have you on board.\n\nBest regards,\nThe Team`,
+  };
+
+  //transporter.sendMail() sends an email based on the configurations set in mailOptions.
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error sending email:", error);
+    } else {
+      console.log("Email sent successfully:", info.response);
+    }
+  });

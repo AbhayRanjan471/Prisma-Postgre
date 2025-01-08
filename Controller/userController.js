@@ -1,4 +1,9 @@
 import prisma from "../DB/db.config.js";
+import transporter from "../Nodemailer/nodemailer.js";
+import dotenv from 'dotenv'
+
+dotenv.config();
+
 
 /********************** CREATE USER ******************************** */
 export const createUser = async (req, res) => {
@@ -26,6 +31,23 @@ export const createUser = async (req, res) => {
       email: email,
       password: password,
     },
+  });
+
+  // Send a welcome email to the user
+  const mailOptions = {
+    from: process.env.EMAIL_USER, // Sender email
+    to: email, // Recipient email (new user's email)
+    subject: "Welcome to Our Platform!",
+    text: `Hi ${name},\n\nWelcome to our platform! We're excited to have you on board.\n\nBest regards,\nThe Team`,
+  };
+
+  //transporter.sendMail() sends an email based on the configurations set in mailOptions.
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error sending email:", error);
+    } else {
+      console.log("Email sent successfully:", info.response);
+    }
   });
 
   //SENDING the response
